@@ -1,0 +1,37 @@
+# Python virtual environments
+.venv/
+venv/
+ENV/
+env/
+*.venv
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Runtime data & jobs outputs
+jobs/*
+!jobs/.gitkeep
+
+# Scratch and temporary testing files
+scratch_test/
+scratch_test_run.py
+test_tile_*.png
+test_check.png
+
+# Operating system & Editor files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+*.lnk
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Environment & local settings
+.env
+*.local

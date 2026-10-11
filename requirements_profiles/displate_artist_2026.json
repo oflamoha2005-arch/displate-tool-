@@ -1,0 +1,211 @@
+{
+  "profile_id": "displate_artist_2026",
+  "name": "Displate Artist Upload Requirements (2026)",
+  "version": "1.0.0",
+  "source_hierarchy": [
+    "Displate Shop Handbook",
+    "Displate Upload Preparation / HD Print Quality page",
+    "Current Displate Artist FAQ / technical requirements",
+    "Displate Artist approval guidance / blog",
+    "Current applicable Displate Terms of Use"
+  ],
+  "requirements": {
+    "minimum_short_side_px": {
+      "value": 2900,
+      "unit": "px",
+      "threshold_type": "OFFICIAL",
+      "comparison": ">=",
+      "description": "Minimum shortest image side required for Displate marketplace approval"
+    },
+    "target_aspect_ratio": {
+      "value": 1.4,
+      "unit": "ratio",
+      "threshold_type": "OFFICIAL",
+      "comparison": "==",
+      "description": "Target artwork aspect ratio (1.4:1 / 5:7) for standard metal canvas fit"
+    },
+    "minimum_dpi": {
+      "value": 300,
+      "unit": "dpi",
+      "threshold_type": "OFFICIAL",
+      "comparison": ">=",
+      "description": "Minimum print resolution metadata required (300 DPI or higher)"
+    },
+    "maximum_file_size_mb": {
+      "value": 30,
+      "unit": "MB",
+      "threshold_type": "OFFICIAL",
+      "comparison": "<=",
+      "description": "Maximum final upload file size"
+    },
+    "reference_safe_margin_px": {
+      "value": 200,
+      "unit": "px",
+      "threshold_type": "OFFICIAL_REFERENCE",
+      "reference_short_side_px": 2900,
+      "reference_file_dimensions": "4060x2900",
+      "description": "Official 200px edge reference for the minimum-size 4060x2900 file; not a universal scaled mandate"
+    }
+  },
+  "recommendations": {
+    "portrait_width_px": {
+      "value": 4000,
+      "unit": "px",
+      "threshold_type": "RECOMMENDATION",
+      "description": "Recommended portrait width"
+    },
+    "portrait_height_px": {
+      "value": 5600,
+      "unit": "px",
+      "threshold_type": "RECOMMENDATION",
+      "description": "Recommended portrait height"
+    },
+    "landscape_width_px": {
+      "value": 5600,
+      "unit": "px",
+      "threshold_type": "RECOMMENDATION",
+      "description": "Recommended landscape width"
+    },
+    "landscape_height_px": {
+      "value": 4000,
+      "unit": "px",
+      "threshold_type": "RECOMMENDATION",
+      "description": "Recommended landscape height"
+    },
+    "preferred_output_color_profile": {
+      "value": "sRGB",
+      "threshold_type": "RECOMMENDATION",
+      "description": "Recommended color profile for standardized output normalization; AdobeRGB (1998) is also accepted in source files"
+    },
+    "preferred_output_format": {
+      "value": "JPEG",
+      "threshold_type": "RECOMMENDATION",
+      "description": "Preferred standard output format for upload preparation"
+    }
+  },
+  "internal_settings": {
+    "aspect_ratio_comparison_epsilon": {
+      "value": 0.004,
+      "threshold_type": "INTERNAL_HEURISTIC",
+      "description": "Internal floating-point computational comparison tolerance; NOT an official Displate tolerance"
+    }
+  },
+  "heuristics": {
+    "brightness_dark_threshold": {
+      "value": 40,
+      "unit": "luminance_0_255",
+      "threshold_type": "INTERNAL_HEURISTIC",
+      "description": "Internal heuristic threshold for flagging very dark compositions; not an official Displate threshold"
+    },
+    "border_sample_px": {
+      "value": 25,
+      "unit": "px",
+      "threshold_type": "INTERNAL_HEURISTIC",
+      "description": "Internal heuristic sampling band thickness for edge border detection"
+    },
+    "border_difference_threshold": {
+      "value": 28,
+      "threshold_type": "INTERNAL_HEURISTIC",
+      "description": "Internal color distance threshold for possible artificial border detection"
+    },
+    "noise_flat_threshold": {
+      "value": 8,
+      "threshold_type": "INTERNAL_HEURISTIC",
+      "description": "Internal standard deviation threshold for clean patch heuristic"
+    },
+    "noise_warn_std": {
+      "value": 22,
+      "threshold_type": "INTERNAL_HEURISTIC",
+      "description": "Internal standard deviation threshold for heavy noise heuristic"
+    },
+    "upscale_var_threshold": {
+      "value": 60,
+      "threshold_type": "INTERNAL_HEURISTIC",
+      "description": "Internal local variance threshold for detecting possible artificial upscaling"
+    },
+    "upscale_edge_threshold": {
+      "value": 10,
+      "threshold_type": "INTERNAL_HEURISTIC",
+      "description": "Internal edge density threshold for detecting possible artificial upscaling"
+    },
+    "sharp_ratio_threshold": {
+      "value": 2.0,
+      "threshold_type": "INTERNAL_HEURISTIC",
+      "description": "Internal ratio of edge RMS to blurred edge RMS for over-sharpening halo detection"
+    },
+    "sharp_abs_threshold": {
+      "value": 30,
+      "threshold_type": "INTERNAL_HEURISTIC",
+      "description": "Internal absolute edge RMS threshold for over-sharpening flag"
+    },
+    "edge_content_abs": {
+      "value": 15,
+      "threshold_type": "INTERNAL_HEURISTIC",
+      "description": "Internal absolute edge density in border strip for safe margin advisory"
+    },
+    "edge_content_ratio": {
+      "value": 1.4,
+      "threshold_type": "INTERNAL_HEURISTIC",
+      "description": "Internal edge density ratio (strip vs center) for safe margin advisory"
+    },
+    "phash_distance_threshold": {
+      "value": 10,
+      "threshold_type": "INTERNAL_HEURISTIC",
+      "description": "Internal Hamming distance threshold for local pHash near-duplicate detection"
+    },
+    "flat_area_ratio_threshold": {
+      "value": 0.15,
+      "threshold_type": "INTERNAL_HEURISTIC",
+      "description": "Area ratio threshold (15%) above which a flat surface advisory warning is issued"
+    },
+    "flat_variance_threshold": {
+      "value": 12.0,
+      "threshold_type": "INTERNAL_HEURISTIC",
+      "description": "Local patch standard deviation threshold below which a region is considered flat"
+    },
+    "flat_edge_density_threshold": {
+      "value": 0.08,
+      "threshold_type": "INTERNAL_HEURISTIC",
+      "description": "Edge density threshold below which a region lacks structural edges"
+    },
+    "flat_min_region_pixels": {
+      "value": 2500,
+      "threshold_type": "INTERNAL_HEURISTIC",
+      "description": "Minimum connected flat patch pixel count on analysis copy to ignore small details"
+    },
+    "flat_edge_protection_distance": {
+      "value": 18,
+      "threshold_type": "INTERNAL_HEURISTIC",
+      "description": "Edge protection exclusion distance in pixels on analysis copy to fade out texture near edges"
+    },
+    "flat_detection_max_px": {
+      "value": 1500,
+      "threshold_type": "INTERNAL_HEURISTIC",
+      "description": "Maximum dimension for analysis copy when computing flat mask"
+    },
+    "texture_enabled_default": {
+      "value": false,
+      "threshold_type": "INTERNAL_HEURISTIC",
+      "description": "Default state for texture enhancement (disabled by default)"
+    },
+    "texture_preset_default": {
+      "value": "very_subtle",
+      "threshold_type": "INTERNAL_HEURISTIC",
+      "description": "Default texture strength preset"
+    },
+    "texture_type_default": {
+      "value": "fine_paper",
+      "threshold_type": "INTERNAL_HEURISTIC",
+      "description": "Default texture type"
+    },
+    "texture_amplitudes": {
+      "value": {
+        "very_subtle": 0.008,
+        "subtle": 0.015,
+        "medium": 0.030
+      },
+      "threshold_type": "INTERNAL_HEURISTIC",
+      "description": "Relative luminance amplitudes for subtle print micro-texture"
+    }
+  }
+}

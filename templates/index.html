@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Displate One-Click Preparer</title>
+  <meta name="description" content="Professional artwork preparation tool for Displate: 15 checks, near-duplicate detection, risk score, batch processing — all in one click.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css?v=2.2">
+</head>
+<body>
+
+<!-- ── Header ──────────────────────────────────────────────────────────────── -->
+<header>
+  <div class="wrap">
+    <div class="header-inner">
+      <div class="logo-mark">D</div>
+      <div class="header-text">
+        <div class="eyebrow">15 Checks · No Upscaling · Local · Fast</div>
+        <h1>Displate One-Click Preparer</h1>
+        <p class="header-desc">
+          Drop your artwork — the tool runs <strong>15 preflight checks</strong>, detects near-duplicates,
+          crops to 5:7, converts to sRGB, sets 300 DPI, exports a JPEG ≤ 30 MB,
+          creates a safe-area preview, and gives you a <strong>rejection risk score</strong>.
+        </p>
+      </div>
+      <button class="theme-btn" id="themeBtn" title="Toggle light/dark mode">
+        <span id="themeIcon">☀️</span> <span id="themeLabel">Light</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ── Upload Panel ─────────────────────────────────────────────────────── -->
+  <section class="panel" id="uploadPanel">
+    <div class="panel-title">Upload Artwork</div>
+
+    <div id="uploadZone">
+      <span class="upload-icon">🎨</span>
+      <h2>Drop artwork here or click to browse</h2>
+      <p>Single image or up to 5 images for batch · Max 80 MB each</p>
+      <div class="upload-hint">
+        <span>JPG</span><span>PNG</span><span>WebP</span><span>AVIF</span>
+      </div>
+      <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.webp,.avif,image/*" multiple>
+    </div>
+
+    <div id="previewStrip"></div>
+
+    <div class="focus-row mt-16">
+      <label for="focusSelect">Crop focus:</label>
+      <select id="focusSelect">
+        <option value="center" selected>Centre (default)</option>
+        <option value="top">Protect top</option>
+        <option value="bottom">Protect bottom</option>
+      </select>
+      <span class="focus-hint">Used only if a 5:7 crop is needed.</span>
+    </div>
+
+    <div class="focus-row mt-16">
+      <label for="resizeModeSelect">Dimensions:</label>
+      <select id="resizeModeSelect">
+        <option value="recommended_size" selected>Displate Standard (4000 × 5600 px) — Optimal</option>
+        <option value="preserve_resolution">Preserve Original Resolution (≥2900 px)</option>
+      </select>
+      <span class="focus-hint">Exact Displate master dimensions (4000×5600 portrait / 5600×4000 landscape).</span>
+    </div>
+
+    <div class="upscale-card mt-16">
+      <div class="upscale-header-row">
+        <label class="toggle-control" for="autoUpscaleCheck">
+          <input type="checkbox" id="autoUpscaleCheck" checked>
+          <span class="toggle-track"></span>
+          <span class="toggle-title">
+            <strong>Auto AI Upscale First</strong>
+            <span class="ai-chip">Real-ESRGAN Vulkan ⚡</span>
+          </span>
+        </label>
+      </div>
+      <div class="upscale-desc">
+        Low-resolution images are enhanced with AI Super-Resolution <em>before</em> cropping and resizing, producing razor-sharp Displate 4000×5600 masters without blurriness.
+      </div>
+      <div class="upscale-options-row" id="upscaleOptionsRow">
+        <label for="upscaleModelSelect">AI Model:</label>
+        <select id="upscaleModelSelect">
+          <option value="realesrgan-x4plus" selected>realesrgan-x4plus (General Art & Photorealistic)</option>
+          <option value="realesrgan-x4plus-anime">realesrgan-x4plus-anime (Anime & 2D Illustration)</option>
+          <option value="realesr-animevideov3-x4">realesr-animevideov3-x4 (Fast 4x)</option>
+          <option value="realesr-animevideov3-x3">realesr-animevideov3-x3 (Fast 3x)</option>
+          <option value="realesr-animevideov3-x2">realesr-animevideov3-x2 (Fast 2x)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="upscale-card mt-16" id="textureCard">
+      <div class="upscale-header-row">
+        <label class="toggle-control" for="textureCheck">
+          <input type="checkbox" id="textureCheck">
+          <span class="toggle-track"></span>
+          <span class="toggle-title">
+            <strong>Texture Enhancement</strong>
+            <span class="ai-chip">Micro-Grain ✨</span>
+          </span>
+        </label>
+      </div>
+      <div class="upscale-desc">
+        Applies organic print micro-texture to detected flat surfaces on luminance only, eliminating metal print banding while preserving artwork details.
+      </div>
+      <div class="upscale-options-row hidden" id="textureOptionsRow">
+        <div style="display:flex; gap:16px; flex-wrap:wrap; width:100%;">
+          <div style="flex:1; min-width:180px;">
+            <label for="textureTypeSelect">Texture Type:</label>
+            <select id="textureTypeSelect">
+              <option value="fine_paper" selected>Fine Paper (Organic Grain)</option>
+              <option value="fine_canvas">Fine Canvas (Subtle Weave)</option>
+            </select>
+          </div>
+          <div style="flex:1; min-width:180px;">
+            <label for="textureStrengthSelect">Strength:</label>
+            <select id="textureStrengthSelect">
+              <option value="very_subtle" selected>Very Subtle (~0.8%)</option>
+              <option value="subtle">Subtle (~1.5%)</option>
+              <option value="medium">Medium (~3.0%)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button id="processBtn" disabled>
+      <span class="btn-icon">⚡</span>
+      <span id="processBtnLabel">Select an image to begin</span>
+    </button>
+  </section>
+
+  <!-- ── Progress Panel ───────────────────────────────────────────────────── -->
+  <section class="panel" id="progressPanel">
+    <div class="progress-header">
+      <div class="progress-title" id="progressTitle">Processing…</div>
+      <div class="progress-badge running" id="progressBadge">Running</div>
+    </div>
+
+    <div class="batch-bar-wrap hidden" id="batchBarWrap">
+      <div class="batch-bar-label" id="batchBarLabel">Image 0 of 0</div>
+      <div class="batch-bar"><div class="batch-bar-fill" id="batchBarFill" style="width:0%"></div></div>
+    </div>
+
+    <div class="steps-list" id="stepsList"></div>
+
+    <!-- Checks -->
+    <div id="checksContainer">
+      <div class="checks-title">Preflight checks (15)</div>
+      <div class="checks-grid" id="checksGrid"></div>
+    </div>
+
+    <!-- Duplicate warning -->
+    <div id="dupPanel">
+      <div class="dup-card">
+        <div class="dup-card-header">
+          <span class="dup-card-icon">⚠️</span>
+          <div>
+            <div class="dup-card-title">Possible Near-Duplicate Detected</div>
+            <div class="dup-card-sub" id="dupSubtitle">This image looks very similar to a previously processed artwork.</div>
+          </div>
+        </div>
+        <div class="dup-comparison">
+          <div class="dup-img-wrap">
+            <div class="dup-img-label">Current image</div>
+            <img id="dupCurrentImg" alt="Current image" src="">
+            <div class="dup-similarity" id="dupCurrentLabel">—</div>
+          </div>
+          <div class="dup-img-wrap">
+            <div class="dup-img-label">Similar job found</div>
+            <img id="dupMatchImg" alt="Matching image" src="">
+            <div class="dup-similarity" id="dupSimilarity">—</div>
+          </div>
+        </div>
+        <div class="dup-proceed-row">
+          <span class="dup-proceed-hint">Displate uses automated near-duplicate detection. Uploading a very similar image may lead to rejection.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Risk Score -->
+    <div id="riskPanel">
+      <div class="risk-card">
+        <div class="risk-header">
+          <div class="risk-title">Rejection Risk Score</div>
+          <div class="risk-score" id="riskScore">—</div>
+        </div>
+        <div class="risk-meter">
+          <div class="risk-meter-fill" id="riskMeterFill" style="width:0%"></div>
+        </div>
+        <div class="risk-breakdown" id="riskBreakdown"></div>
+      </div>
+    </div>
+
+    <!-- Blocked -->
+    <div id="blockedBox">
+      <div class="blocked-box">
+        <strong>⛔ Source cannot be prepared</strong>
+        <p id="blockedReason">The shortest side is below 2900 px. Please enable <strong>Auto AI Upscale</strong> above or provide a higher-resolution source.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Result Panel ──────────────────────────────────────────────────────── -->
+  <section class="panel" id="resultPanel">
+    <div class="result-header">
+      <div class="result-badge">✅ Ready for Displate</div>
+      <div class="result-title">Technical preparation complete</div>
+    </div>
+
+    <div class="result-images">
+      <div class="result-img-card">
+        <h3>Final artwork</h3>
+        <img id="finalImg" alt="Prepared artwork" src="">
+        <a id="finalDl" class="dl-img-btn" href="#" download>⬇ Download JPG</a>
+      </div>
+      <div class="result-img-card">
+        <h3>200 px safe-area preview</h3>
+        <img id="safeImg" alt="Safe-area preview" src="">
+        <a id="safeDl" class="dl-img-btn" href="#" download>⬇ Download Preview</a>
+      </div>
+      <div class="result-img-card" id="maskImgCard" style="display:none">
+        <h3>Flat-area Mask / Heatmap</h3>
+        <img id="maskImg" alt="Flat-area heatmap" src="">
+        <a id="maskDl" class="dl-img-btn" href="#" download>⬇ Download Mask</a>
+      </div>
+    </div>
+
+    <div class="specs-grid" id="specsGrid"></div>
+
+    <div class="dl-row">
+      <a id="zipDl"    class="dl-btn"          href="#" download>📦 Download ZIP package</a>
+      <a id="reportDl" class="dl-btn secondary" href="#" download>📄 Download JSON report</a>
+    </div>
+
+    <div class="warning-box">
+      <strong>⚠ Manual review required before uploading to Displate</strong>
+      <ul>
+        <li>Check the safe-area preview — keep faces, text, and signatures inside the red rectangle.</li>
+        <li>Inspect the final JPG at 100% zoom for blur, grain, artifacts, logos, or watermarks.</li>
+        <li>Confirm you own or are licensed to use every element in the artwork.</li>
+        <li>Technical preparation does not guarantee Displate marketplace approval.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── Batch Results Panel ──────────────────────────────────────────────── -->
+  <section class="panel" id="batchResults">
+    <div class="panel-title">Batch results</div>
+    <div id="batchList"></div>
+    <div class="batch-export-row" id="batchExportRow" style="display:none">
+      <button class="dl-btn secondary" id="batchCsvBtn">📊 Export CSV report</button>
+    </div>
+  </section>
+
+  <!-- ── History Dashboard ────────────────────────────────────────────────── -->
+  <section id="historySection">
+    <button class="history-toggle" id="historyToggle">
+      <span>🕐</span>
+      <span>Recent jobs</span>
+      <span class="ht-arrow" style="margin-left:auto">▾</span>
+    </button>
+    <div id="historyPanel" class="panel">
+      <div class="panel-title">Job history (last 10)</div>
+      <div class="history-list" id="historyList">
+        <div class="history-empty">Loading…</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Nothing is sent to any AI service or remote server. All processing happens locally on your machine.
+    · Displate One-Click Preparer
+  </div>
+</footer>
+
+<script src="/static/app.js?v=2.4"></script>
+</body>
+</html>
